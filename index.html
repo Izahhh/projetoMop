@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechMan - Manutenção Industrial</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <!-- Navegação -->
+    <nav class="navbar">
+        <div class="logo">TechMan Industrial</div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showSection('home')">Início</a></li>
+            <li><a href="#" onclick="showSection('os-section')">Ordem de Serviço</a></li>
+            <li><a href="#" onclick="showSection('pop-section')">POP</a></li>
+            <li><a href="#" onclick="showSection('metrics-section')">Indicadores</a></li>
+            <li><a href="#" onclick="showSection('consult-section'); carregarRegistros()">Consultar Registros</a></li>
+            <li><a href="#" onclick="showSection('about-section')">Sobre</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        
+        <!-- SEÇÃO: INÍCIO -->
+        <section id="home" class="active-section">
+            <h1>Bem-vindo ao Sistema de Gestão de Manutenção</h1>
+            <p>Especialistas em Impressoras 3D Industriais, Braços Robóticos e Painéis Solares.</p>
+            <div class="quick-actions">
+                <button class="btn-accent" onclick="showSection('os-section')">Nova Ordem de Serviço</button>
+                <button class="btn-accent" onclick="showSection('consult-section'); carregarRegistros()">Ver Registros Salvos</button>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: ORDEM DE SERVIÇO -->
+        <section id="os-section" class="hidden-section">
+            <div id="os-document" class="document-container">
+                <h2>EMPRESA DE MANUTENÇÃO & CONFIABILIDADE</h2>
+                <h3>ORDEM DE SERVIÇO - OS Nº <span id="os-number">2026/0001</span></h3>
+                
+                <form id="os-form">
+                    <div class="form-group">
+                        <label>Tipo de Manutenção:</label>
+                        <div class="radio-group">
+                            <input type="radio" name="tipo_manutencao" value="Corretiva" required> Corretiva
+                            <input type="radio" name="tipo_manutencao" value="Preventiva"> Preventiva / Startup
+                            <input type="radio" name="tipo_manutencao" value="Preditiva"> Preditiva
+                        </div>
+                    </div>
+
+                    <h4>1. DADOS DO CLIENTE E DA PLANTA</h4>
+                    <div class="grid-2">
+                        <input type="text" id="os-cliente" placeholder="Cliente" required>
+                        <input type="text" id="os-setor" placeholder="Setor" required>
+                        <input type="text" id="os-local" placeholder="Localização" required>
+                        <input type="date" id="os-data" required>
+                    </div>
+
+                    <h4>2. IDENTIFICAÇÃO DOS EQUIPAMENTOS</h4>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" value="Impressora 3D Creality K1"> Impressora 3D Creality K1</label>
+                        <label><input type="checkbox" value="Painel Solar 640W Jinko"> Painel Solar 640W Jinko Bifacial</label>
+                        <label><input type="checkbox" value="Braço Robótico KUKA KR"> Braço Robótico (KUKA KR / UR10e)</label>
+                        <input type="text" placeholder="Outro equipamento..." id="os-outro-equip">
+                    </div>
+
+                    <h4>3. DESCRIÇÃO DA SOLICITAÇÃO / ESCOPO</h4>
+                    <textarea id="os-descricao" rows="4" required></textarea>
+
+                    <h4>4. RECURSOS UTILIZADOS</h4>
+                    <div class="grid-2">
+                        <input type="text" id="os-tecnico" placeholder="Técnico Responsável" required>
+                        <input type="number" id="os-horas" placeholder="Horas Trabalhadas" required>
+                    </div>
+                    <textarea id="os-pecas" rows="2" placeholder="Materiais/Peças utilizadas"></textarea>
+
+                    <h4>5. CHECKLIST DE EXECUÇÃO E SEGURANÇA</h4>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> Desenergização do equipamento (LOTO)</label>
+                        <label><input type="checkbox"> Uso de EPIs adequados</label>
+                        <label><input type="checkbox"> Limpeza e organização da área pós-serviço</label>
+                    </div>
+
+                    <h4>6. ENCERRAMENTO E APROVAÇÃO</h4>
+                    <div class="radio-group">
+                        <input type="radio" name="status" value="Concluído" required> Concluído com Sucesso
+                        <input type="radio" name="status" value="Pendente"> Pendente
+                        <input type="radio" name="status" value="Cancelado"> Cancelado
+                    </div>
+                    <textarea id="os-obs" rows="2" placeholder="Observações do Técnico"></textarea>
+                    
+                    <div class="signatures">
+                        <div>
+                            <hr>
+                            <p>Assinatura do Técnico</p>
+                        </div>
+                        <div>
+                            <hr>
+                            <p>Assinatura do Cliente</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions hide-on-pdf">
+                        <button type="submit" class="btn-accent">Registrar e Gerar PDF</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: POP -->
+        <section id="pop-section" class="hidden-section">
+            <div id="pop-document" class="document-container">
+                <h2>TECHMAN INDUSTRIAL</h2>
+                <h3>PROCEDIMENTO OPERACIONAL PADRÃO (POP)</h3>
+                
+                <form id="pop-form">
+                    <div class="grid-2">
+                        <input type="text" id="pop-titulo" value="Como receber chamados" required>
+                        <input type="text" id="pop-numero" value="001" required>
+                        <input type="text" id="pop-versao" value="1" required>
+                        <input type="date" id="pop-data-emissao" required>
+                        <input type="text" id="pop-elaborado" value="Júlio" required>
+                        <input type="text" id="pop-aprovado" value="Carlos" required>
+                    </div>
+
+                    <h4>1. Objetivo</h4>
+                    <textarea rows="3">Estabelecer os processos para recebimento de chamados por parte da empresa, abordando desde a solicitação do cliente até os processos internos para conclusão do serviço.</textarea>
+
+                    <h4>2. Recursos necessários</h4>
+                    <textarea rows="4">• Portal de abertura de chamados (Produttivo)&#10;• QR Code anexado aos equipamentos&#10;• Link personalizado para cliente&#10;• Tablets/Celulares para equipe</textarea>
+
+                    <h4>3. Procedimento - Checklist</h4>
+                    <table class="pop-table">
+                        <tr><th>Item</th><th>Descrição</th><th>Responsável</th><th>Verificação</th></tr>
+                        <tr><td>1</td><td>Personalizar página de chamados</td><td>Júlio/Técnico</td><td><input type="checkbox" checked></td></tr>
+                        <tr><td>2</td><td>Anexar QR Codes aos equipamentos</td><td>Júlio/Técnico</td><td><input type="checkbox" checked></td></tr>
+                        <tr><td>3</td><td>Fornecer link exclusivo</td><td>Luisa/Atendimento</td><td><input type="checkbox" checked></td></tr>
+                        <tr><td>4</td><td>Organizar página de atividades</td><td>Carlos/Gestor</td><td><input type="checkbox" checked></td></tr>
+                        <tr><td>5</td><td>Classificar prioridade</td><td>Carlos/Gestor</td><td><input type="checkbox"></td></tr>
+                    </table>
+
+                    <h4>4. Critérios de aceitação</h4>
+                    <textarea rows="3">Todos os chamados registrados no sistema. Priorização correta. Encaminhamento em até 15 min. Cliente informado do status.</textarea>
+
+                    <div class="signatures">
+                        <div>
+                            <hr>
+                            <p>Elaborado por: Júlio</p>
+                        </div>
+                        <div>
+                            <hr>
+                            <p>Aprovado por: Carlos</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions hide-on-pdf">
+                        <button type="submit" class="btn-accent">Registrar e Gerar PDF</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- NOVA SEÇÃO: CONSULTAR REGISTROS -->
+        <section id="consult-section" class="hidden-section">
+            <h2>Registros Salvos no Sistema</h2>
+            
+            <div class="consult-container">
+                <h3>Ordens de Serviço (OS)</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Técnico</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="os-table-body">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 30px;">Procedimentos Operacionais (POP)</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Título</th>
+                            <th>Data de Emissão</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pop-table-body">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: INDICADORES (MTBF / MTTR) -->
+        <section id="metrics-section" class="hidden-section">
+            <h2>Indicadores de Confiabilidade</h2>
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <h3>Calcular MTBF</h3>
+                    <p>(Tempo Médio Entre Falhas)</p>
+                    <input type="number" id="mtbf-tempo" placeholder="Tempo total de operação (Horas)">
+                    <input type="number" id="mtbf-falhas" placeholder="Número de falhas">
+                    <button class="btn-accent" onclick="calcularMTBF()">Calcular</button>
+                    <div id="resultado-mtbf" class="resultado"></div>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Calcular MTTR</h3>
+                    <p>(Tempo Médio de Reparo)</p>
+                    <input type="number" id="mttr-tempo" placeholder="Tempo total de parada (Horas)">
+                    <input type="number" id="mttr-falhas" placeholder="Número de falhas">
+                    <button class="btn-accent" onclick="calcularMTTR()">Calcular</button>
+                    <div id="resultado-mttr" class="resultado"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: SOBRE A EMPRESA -->
+        <section id="about-section" class="hidden-section">
+            <h2>Sobre a TechMan Industrial</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>Nossa Missão</h3>
+                    <p>Garantir a máxima disponibilidade e confiabilidade dos ativos industriais de nossos clientes, oferecendo manutenção de excelência em impressoras 3D, painéis solares e robótica.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Nossa Visão</h3>
+                    <p>Ser a principal referência nacional em manutenção de tecnologias da indústria 4.0 e energias renováveis até 2030.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Nossos Valores</h3>
+                    <p>Segurança em primeiro lugar, Inovação contínua, Transparência com o cliente e Sustentabilidade.</p>
+                </div>
+            </div>
+            <div class="contact-info">
+                <h3>Entre em Contato</h3>
+                <p>Email: contato@techmanindustrial.com.br</p>
+                <p>Telefone: (11) 99999-9999</p>
+                <p>Endereço: Polo Industrial, Galpão 4 - São Paulo, SP</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
