@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechMan -> Manutenção Industrial</title>
+    <title>MECFORTE - Manutenção Industrial</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -11,14 +11,14 @@
 
     <!-- Navegação -->
     <nav class="navbar">
-        <div class="logo">TechMan Industrial</div>
+        <img src="logo.png" alt="Logo MECFORTE" class="nav-logo">
         <ul class="nav-links">
             <li><a href="#" onclick="showSection('home')">Início</a></li>
             <li><a href="#" onclick="showSection('os-section')">Ordem de Serviço</a></li>
             <li><a href="#" onclick="showSection('pop-section')">POP</a></li>
+            <li><a href="#" onclick="showSection('req-section')">Requisição de Material</a></li>
             <li><a href="#" onclick="showSection('metrics-section')">Indicadores</a></li>
             <li><a href="#" onclick="showSection('consult-section'); carregarRegistros()">Consultar Registros</a></li>
-            <li><a href="#" onclick="showSection('about-section')">Sobre</a></li>
         </ul>
     </nav>
 
@@ -30,66 +30,123 @@
             <p>Especialistas em Impressoras 3D Industriais, Braços Robóticos e Painéis Solares.</p>
             <div class="quick-actions">
                 <button class="btn-accent" onclick="showSection('os-section')">Nova Ordem de Serviço</button>
-                <button class="btn-accent" onclick="showSection('consult-section'); carregarRegistros()">Ver Registros Salvos</button>
+                <button class="btn-accent" onclick="showSection('pop-section')">Novo POP</button>
+                <button class="btn-accent" onclick="showSection('req-section')">Nova Requisição</button>
+                <button class="btn-accent" onclick="showSection('consult-section'); carregarRegistros()">Ver Registros</button>
             </div>
         </section>
 
         <!-- SEÇÃO: ORDEM DE SERVIÇO -->
         <section id="os-section" class="hidden-section">
             <div id="os-document" class="document-container">
-                <h2>EMPRESA DE MANUTENÇÃO & CONFIABILIDADE</h2>
-                <h3>ORDEM DE SERVIÇO - OS Nº <span id="os-number">2026/0001</span></h3>
+                <div class="doc-header">
+                    <img src="logo.png" alt="Logo MECFORTE" class="doc-logo">
+                    <div class="doc-title">
+                        <h2>MECFORTE - MANUTENÇÃO INDUSTRIAL LTDA</h2>
+                        <h3>ORDEM DE SERVIÇO - OS Nº <span id="os-number">2026/0001</span></h3>
+                    </div>
+                </div>
                 
                 <form id="os-form">
-                    <div class="form-group">
+                    <div class="input-group">
                         <label>Tipo de Manutenção:</label>
                         <div class="radio-group">
-                            <input type="radio" name="tipo_manutencao" value="Corretiva" required> Corretiva
-                            <input type="radio" name="tipo_manutencao" value="Preventiva"> Preventiva / Startup
-                            <input type="radio" name="tipo_manutencao" value="Preditiva"> Preditiva
+                            <label><input type="radio" name="tipo_manutencao" value="Corretiva" required> Corretiva</label>
+                            <label><input type="radio" name="tipo_manutencao" value="Preventiva"> Preventiva / Startup</label>
+                            <label><input type="radio" name="tipo_manutencao" value="Preditiva"> Preditiva</label>
                         </div>
                     </div>
 
                     <h4>1. DADOS DO CLIENTE E DA PLANTA</h4>
                     <div class="grid-2">
-                        <input type="text" id="os-cliente" placeholder="Cliente" required>
-                        <input type="text" id="os-setor" placeholder="Setor" required>
-                        <input type="text" id="os-local" placeholder="Localização" required>
-                        <input type="date" id="os-data" required>
+                        <div class="input-group">
+                            <label for="os-cliente">Nome do Cliente:</label>
+                            <input type="text" id="os-cliente" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="os-setor">Setor / Departamento:</label>
+                            <input type="text" id="os-setor" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="os-local">Localização da Planta:</label>
+                            <input type="text" id="os-local" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="os-data">Data de Emissão:</label>
+                            <input type="date" id="os-data" required>
+                        </div>
                     </div>
 
                     <h4>2. IDENTIFICAÇÃO DOS EQUIPAMENTOS</h4>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" value="Impressora 3D Creality K1"> Impressora 3D Creality K1</label>
-                        <label><input type="checkbox" value="Painel Solar 640W Jinko"> Painel Solar 640W Jinko Bifacial</label>
-                        <label><input type="checkbox" value="Braço Robótico KUKA KR"> Braço Robótico (KUKA KR / UR10e)</label>
-                        <input type="text" placeholder="Outro equipamento..." id="os-outro-equip">
+                    <div class="input-group">
+                        <label>Selecione os equipamentos envolvidos:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" value="Impressora 3D Creality K1"> Impressora 3D Creality K1</label>
+                            <label><input type="checkbox" value="Painel Solar 640W Jinko"> Painel Solar 640W Jinko Bifacial</label>
+                            <label><input type="checkbox" value="Braço Robótico KUKA KR"> Braço Robótico (KUKA KR / UR10e)</label>
+                        </div>
+                        <label for="os-outro-equip">Outro equipamento (Opcional):</label>
+                        <input type="text" id="os-outro-equip">
                     </div>
 
-                    <h4>3. DESCRIÇÃO DA SOLICITAÇÃO / ESCOPO</h4>
-                    <textarea id="os-descricao" rows="4" required></textarea>
+                    <h4>3. DESCRIÇÃO DA SOLICITAÇÃO / ESCOPO </h4>
+                    <div class="input-group">
+                        <label for="os-descricao">Descreva detalhadamente o problema ou serviço a ser realizado:</label>
+                        <textarea id="os-descricao" rows="4" required></textarea>
+                    </div>
 
                     <h4>4. RECURSOS UTILIZADOS</h4>
                     <div class="grid-2">
-                        <input type="text" id="os-tecnico" placeholder="Técnico Responsável" required>
-                        <input type="number" id="os-horas" placeholder="Horas Trabalhadas" required>
+                        <div class="input-group">
+                            <label for="os-tecnico">Técnico Responsável:</label>
+                            <input type="text" id="os-tecnico" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="os-horas">Horas Trabalhadas:</label>
+                            <input type="number" id="os-horas" required>
+                        </div>
                     </div>
-                    <textarea id="os-pecas" rows="2" placeholder="Materiais/Peças utilizadas"></textarea>
+                    <div class="input-group">
+                        <label for="os-pecas">Materiais e Peças utilizadas:</label>
+                        <textarea id="os-pecas" rows="2"></textarea>
+                    </div>
 
                     <h4>5. CHECKLIST DE EXECUÇÃO E SEGURANÇA</h4>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox"> Desenergização do equipamento (LOTO)</label>
-                        <label><input type="checkbox"> Uso de EPIs adequados</label>
-                        <label><input type="checkbox"> Limpeza e organização da área pós-serviço</label>
+                    <div class="input-group">
+                        <label>Confirme os procedimentos de segurança realizados:</label>
+                        <div id="os-checklist-container">
+                            <div class="checklist-item">
+                                <input type="checkbox">
+                                <input type="text" class="table-input" value="Desenergização do equipamento (LOTO)">
+                                <button type="button" class="btn-remove hide-on-pdf" onclick="removerLinhaOS(this)">X</button>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox">
+                                <input type="text" class="table-input" value="Uso de EPIs adequados">
+                                <button type="button" class="btn-remove hide-on-pdf" onclick="removerLinhaOS(this)">X</button>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox">
+                                <input type="text" class="table-input" value="Limpeza e organização da área pós-serviço">
+                                <button type="button" class="btn-remove hide-on-pdf" onclick="removerLinhaOS(this)">X</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add hide-on-pdf" onclick="adicionarLinhaOS()" style="margin-top: 10px; width: fit-content;">+ Adicionar Item</button>
                     </div>
 
                     <h4>6. ENCERRAMENTO E APROVAÇÃO</h4>
-                    <div class="radio-group">
-                        <input type="radio" name="status" value="Concluído" required> Concluído com Sucesso
-                        <input type="radio" name="status" value="Pendente"> Pendente
-                        <input type="radio" name="status" value="Cancelado"> Cancelado
+                    <div class="input-group">
+                        <label>Status Final do Serviço:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="status" value="Concluído" required> Concluído com Sucesso</label>
+                            <label><input type="radio" name="status" value="Pendente"> Pendente</label>
+                            <label><input type="radio" name="status" value="Cancelado"> Cancelado</label>
+                        </div>
                     </div>
-                    <textarea id="os-obs" rows="2" placeholder="Observações do Técnico"></textarea>
+                    <div class="input-group">
+                        <label for="os-obs">Observações Finais do Técnico:</label>
+                        <textarea id="os-obs" rows="2"></textarea>
+                    </div>
                     
                     <div class="signatures">
                         <div>
@@ -112,46 +169,102 @@
         <!-- SEÇÃO: POP -->
         <section id="pop-section" class="hidden-section">
             <div id="pop-document" class="document-container">
-                <h2>TECHMAN INDUSTRIAL</h2>
-                <h3>PROCEDIMENTO OPERACIONAL PADRÃO (POP)</h3>
+                <div class="doc-header">
+                    <img src="logo.png" alt="Logo MECFORTE" class="doc-logo">
+                    <div class="doc-title">
+                        <h2>MECFORTE - MANUTENÇÃO INDUSTRIAL LTDA</h2>
+                        <h3>PROCEDIMENTO OPERACIONAL PADRÃO (POP)</h3>
+                    </div>
+                </div>
                 
                 <form id="pop-form">
+                    <div class="input-group">
+                        <label>Tipo de POP:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="tipo_pop" value="Instalação" required> POP Instalação</label>
+                            <label><input type="radio" name="tipo_pop" value="Startup"> POP Startup</label>
+                            <label><input type="radio" name="tipo_pop" value="Manutenção Preventiva"> POP Manutenção Preventiva</label>
+                        </div>
+                    </div>
+
                     <div class="grid-2">
-                        <input type="text" id="pop-titulo" value="Como receber chamados" required>
-                        <input type="text" id="pop-numero" value="001" required>
-                        <input type="text" id="pop-versao" value="1" required>
-                        <input type="date" id="pop-data-emissao" required>
-                        <input type="text" id="pop-elaborado" value="Júlio" required>
-                        <input type="text" id="pop-aprovado" value="Carlos" required>
+                        <div class="input-group">
+                            <label for="pop-titulo">Título do Procedimento:</label>
+                            <input type="text" id="pop-titulo" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="pop-numero">Número do POP (Automático):</label>
+                            <input type="text" id="pop-numero" readonly style="background-color: #e9ecef; font-weight: bold; color: var(--color-30);">
+                        </div>
+                        <div class="input-group">
+                            <label for="pop-versao">Versão:</label>
+                            <input type="text" id="pop-versao" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="pop-data-emissao">Data de Emissão:</label>
+                            <input type="date" id="pop-data-emissao" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="pop-elaborado">Elaborado por:</label>
+                            <input type="text" id="pop-elaborado" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="pop-aprovado">Aprovado por:</label>
+                            <input type="text" id="pop-aprovado" required>
+                        </div>
                     </div>
 
                     <h4>1. Objetivo</h4>
-                    <textarea rows="3">Estabelecer os processos para recebimento de chamados por parte da empresa, abordando desde a solicitação do cliente até os processos internos para conclusão do serviço.</textarea>
+                    <div class="input-group">
+                        <label for="pop-objetivo">Descreva o objetivo principal deste POP:</label>
+                        <textarea id="pop-objetivo" rows="3" required></textarea>
+                    </div>
 
                     <h4>2. Recursos necessários</h4>
-                    <textarea rows="4">• Portal de abertura de chamados (Produttivo)&#10;• QR Code anexado aos equipamentos&#10;• Link personalizado para cliente&#10;• Tablets/Celulares para equipe</textarea>
+                    <div class="input-group">
+                        <label for="pop-recursos">Liste ferramentas, sistemas ou equipamentos necessários:</label>
+                        <textarea id="pop-recursos" rows="4" required></textarea>
+                    </div>
 
                     <h4>3. Procedimento - Checklist</h4>
-                    <table class="pop-table">
-                        <tr><th>Item</th><th>Descrição</th><th>Responsável</th><th>Verificação</th></tr>
-                        <tr><td>1</td><td>Personalizar página de chamados</td><td>Júlio/Técnico</td><td><input type="checkbox" checked></td></tr>
-                        <tr><td>2</td><td>Anexar QR Codes aos equipamentos</td><td>Júlio/Técnico</td><td><input type="checkbox" checked></td></tr>
-                        <tr><td>3</td><td>Fornecer link exclusivo</td><td>Luisa/Atendimento</td><td><input type="checkbox" checked></td></tr>
-                        <tr><td>4</td><td>Organizar página de atividades</td><td>Carlos/Gestor</td><td><input type="checkbox" checked></td></tr>
-                        <tr><td>5</td><td>Classificar prioridade</td><td>Carlos/Gestor</td><td><input type="checkbox"></td></tr>
+                    <table class="pop-table" id="tabela-checklist">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">Item</th>
+                                <th style="width: 45%;">Descrição da Ação</th>
+                                <th style="width: 25%;">Responsável</th>
+                                <th style="width: 10%; text-align: center;">Verificação</th>
+                                <th style="width: 10%; text-align: center;" class="hide-on-pdf">Ação</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="pop-checklist-body">
+                            <tr>
+                                <td><input type="text" class="table-input item-numero" value="1" readonly></td>
+                                <td><input type="text" class="table-input"></td>
+                                <td><input type="text" class="table-input"></td>
+                                <td style="text-align: center;"><input type="checkbox"></td>
+                                <td style="text-align: center;" class="hide-on-pdf">
+                                    <button type="button" class="btn-remove" onclick="removerLinhaPOP(this)">X</button>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
+                    <button type="button" class="btn-add hide-on-pdf" onclick="adicionarLinhaPOP()">+ Adicionar Passo</button>
 
                     <h4>4. Critérios de aceitação</h4>
-                    <textarea rows="3">Todos os chamados registrados no sistema. Priorização correta. Encaminhamento em até 15 min. Cliente informado do status.</textarea>
+                    <div class="input-group">
+                        <label for="pop-criterios">Quais são os critérios para considerar o serviço bem feito?</label>
+                        <textarea id="pop-criterios" rows="3" required></textarea>
+                    </div>
 
                     <div class="signatures">
                         <div>
                             <hr>
-                            <p>Elaborado por: Júlio</p>
+                            <p>Assinatura do Elaborador</p>
                         </div>
                         <div>
                             <hr>
-                            <p>Aprovado por: Carlos</p>
+                            <p>Assinatura do Aprovador</p>
                         </div>
                     </div>
 
@@ -162,7 +275,89 @@
             </div>
         </section>
 
-        <!-- NOVA SEÇÃO: CONSULTAR REGISTROS -->
+        <!-- SEÇÃO: REQUISIÇÃO DE MATERIAL -->
+        <section id="req-section" class="hidden-section">
+            <div id="req-document" class="document-container">
+                
+                <div class="doc-header">
+                    <img src="logo.png" alt="Logo MECFORTE" class="doc-logo">
+                    <div class="doc-title">
+                        <h2>MECFORTE - MANUTENÇÃO INDUSTRIAL LTDA</h2>
+                        <h3>GERÊNCIA DE ADMINISTRAÇÃO / COORDENAÇÃO DE PATRIMÔNIO</h3>
+                    </div>
+                </div>
+
+                <div class="req-title-box">
+                    <h2>ALMOXARIFADO</h2>
+                </div>
+                
+                <form id="req-form">
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="req-numero">REQUISIÇÃO DE MATERIAL Nº (Automático):</label>
+                            <input type="text" id="req-numero" readonly style="background-color: #e9ecef; font-weight: bold; color: var(--color-30);">
+                        </div>
+                        <div class="input-group">
+                            <label for="req-data">Data:</label>
+                            <input type="date" id="req-data" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="req-setor">Setor Requisitante:</label>
+                        <input type="text" id="req-setor" required>
+                    </div>
+
+                    <table class="pop-table" id="tabela-req">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">ITEM</th>
+                                <th style="width: 50%;">DESCRIÇÃO</th>
+                                <th style="width: 15%;">UNIDADE</th>
+                                <th style="width: 15%;">QTD REQUISITADA</th>
+                                <th style="width: 10%; text-align: center;" class="hide-on-pdf">Ação</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="req-table-body">
+                            <tr>
+                                <td><input type="text" class="table-input item-numero-req" value="1" readonly></td>
+                                <td><input type="text" class="table-input" required></td>
+                                <td><input type="text" class="table-input" required></td>
+                                <td><input type="number" class="table-input" required></td>
+                                <td style="text-align: center;" class="hide-on-pdf">
+                                    <button type="button" class="btn-remove" onclick="removerLinhaReq(this)">X</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn-add hide-on-pdf" onclick="adicionarLinhaReq()">+ Adicionar Item</button>
+
+                    <div class="signatures" style="margin-top: 60px; gap: 20px;">
+                        <div>
+                            <p style="margin-bottom: 30px; text-align: left;">Data: ___/___/_____</p>
+                            <hr>
+                            <p>Requisitante</p>
+                        </div>
+                        <div>
+                            <p style="margin-bottom: 30px; text-align: left;">Data: ___/___/_____</p>
+                            <hr>
+                            <p>Gerência de Administração</p>
+                        </div>
+                        <div>
+                            <p style="margin-bottom: 30px; text-align: left;">Data: ___/___/_____</p>
+                            <hr>
+                            <p>Almoxarifado</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions hide-on-pdf">
+                        <button type="submit" class="btn-accent">Registrar e Gerar PDF</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: CONSULTAR REGISTROS -->
         <section id="consult-section" class="hidden-section">
             <h2>Registros Salvos no Sistema</h2>
             
@@ -175,11 +370,10 @@
                             <th>Cliente</th>
                             <th>Técnico</th>
                             <th>Status</th>
+                            <th style="text-align: center;">Ação</th>
                         </tr>
                     </thead>
-                    <tbody id="os-table-body">
-                        <!-- Preenchido via JavaScript -->
-                    </tbody>
+                    <tbody id="os-table-body"></tbody>
                 </table>
 
                 <h3 style="margin-top: 30px;">Procedimentos Operacionais (POP)</h3>
@@ -187,23 +381,38 @@
                     <thead>
                         <tr>
                             <th>Número</th>
+                            <th>Tipo</th>
                             <th>Título</th>
                             <th>Data de Emissão</th>
+                            <th style="text-align: center;">Ação</th>
                         </tr>
                     </thead>
-                    <tbody id="pop-table-body">
-                        <!-- Preenchido via JavaScript -->
-                    </tbody>
+                    <tbody id="pop-table-body"></tbody>
+                </table>
+
+                <h3 style="margin-top: 30px;">Requisições de Material</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Setor Requisitante</th>
+                            <th>Data</th>
+                            <th style="text-align: center;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="req-table-body-consult"></tbody>
                 </table>
             </div>
         </section>
 
-        <!-- SEÇÃO: INDICADORES (MTBF / MTTR) -->
+        <!-- SEÇÃO: INDICADORES (KPIs) -->
         <section id="metrics-section" class="hidden-section">
-            <h2>Indicadores de Confiabilidade</h2>
+            <h2>Indicadores de Manutenção e Confiabilidade (KPIs)</h2>
             <div class="metrics-container">
+                
+                <!-- MTBF -->
                 <div class="metric-card">
-                    <h3>Calcular MTBF</h3>
+                    <h3>MTBF</h3>
                     <p>(Tempo Médio Entre Falhas)</p>
                     <input type="number" id="mtbf-tempo" placeholder="Tempo total de operação (Horas)">
                     <input type="number" id="mtbf-falhas" placeholder="Número de falhas">
@@ -211,39 +420,75 @@
                     <div id="resultado-mtbf" class="resultado"></div>
                 </div>
 
+                <!-- MTTR -->
                 <div class="metric-card">
-                    <h3>Calcular MTTR</h3>
+                    <h3>MTTR</h3>
                     <p>(Tempo Médio de Reparo)</p>
                     <input type="number" id="mttr-tempo" placeholder="Tempo total de parada (Horas)">
                     <input type="number" id="mttr-falhas" placeholder="Número de falhas">
                     <button class="btn-accent" onclick="calcularMTTR()">Calcular</button>
                     <div id="resultado-mttr" class="resultado"></div>
                 </div>
-            </div>
-        </section>
 
-        <!-- SEÇÃO: SOBRE A EMPRESA -->
-        <section id="about-section" class="hidden-section">
-            <h2>Sobre a TechMan Industrial</h2>
-            <div class="about-grid">
-                <div class="about-card">
-                    <h3>Nossa Missão</h3>
-                    <p>Garantir a máxima disponibilidade e confiabilidade dos ativos industriais de nossos clientes, oferecendo manutenção de excelência em impressoras 3D, painéis solares e robótica.</p>
+                <!-- DISPONIBILIDADE -->
+                <div class="metric-card">
+                    <h3>Disponibilidade</h3>
+                    <p>(Física / Inerente)</p>
+                    <input type="number" id="disp-hc" placeholder="Horas Calendário (Total)">
+                    <input type="number" id="disp-hm" placeholder="Horas de Manutenção (Parada)">
+                    <button class="btn-accent" onclick="calcularDisponibilidade()">Calcular</button>
+                    <div id="resultado-disp" class="resultado"></div>
                 </div>
-                <div class="about-card">
-                    <h3>Nossa Visão</h3>
-                    <p>Ser a principal referência nacional em manutenção de tecnologias da indústria 4.0 e energias renováveis até 2030.</p>
+
+                <!-- CONFIABILIDADE -->
+                <div class="metric-card">
+                    <h3>Confiabilidade</h3>
+                    <input type="number" id="conf-mtbf" placeholder="MTBF (Horas)">
+                    <input type="number" id="conf-t" placeholder="Tempo de Operação Desejado (t)">
+                    <button class="btn-accent" onclick="calcularConfiabilidade()">Calcular</button>
+                    <div id="resultado-conf" class="resultado"></div>
                 </div>
-                <div class="about-card">
-                    <h3>Nossos Valores</h3>
-                    <p>Segurança em primeiro lugar, Inovação contínua, Transparência com o cliente e Sustentabilidade.</p>
+
+                <!-- BACKLOG -->
+                <div class="metric-card">
+                    <h3>Backlog</h3>
+                    <p>(Carga de Trabalho Pendente)</p>
+                    <input type="number" id="backlog-pendentes" placeholder="Soma das horas estimadas (OS Pendentes)">
+                    <input type="number" id="backlog-disponiveis" placeholder="Horas-homem disponíveis (Período)">
+                    <button class="btn-accent" onclick="calcularBacklog()">Calcular</button>
+                    <div id="resultado-backlog" class="resultado"></div>
                 </div>
-            </div>
-            <div class="contact-info">
-                <h3>Entre em Contato</h3>
-                <p>Email: contato@techmanindustrial.com.br</p>
-                <p>Telefone: (11) 99999-9999</p>
-                <p>Endereço: Polo Industrial, Galpão 4 - São Paulo, SP</p>
+
+                <!-- RETRABALHO -->
+                <div class="metric-card">
+                    <h3>Retrabalho (%)</h3>
+                    <p>(Qualidade da Manutenção)</p>
+                    <input type="number" id="ret-os" placeholder="Número de OS de Retrabalho">
+                    <input type="number" id="ret-total" placeholder="Número Total de OS">
+                    <button class="btn-accent" onclick="calcularRetrabalho()">Calcular</button>
+                    <div id="resultado-ret" class="resultado"></div>
+                </div>
+
+                <!-- TAXA DE FREQUÊNCIA DE ACIDENTES -->
+                <div class="metric-card">
+                    <h3>Taxa de Freq. de Acidentes</h3>
+                    <p>(TFA - NBR 14280)</p>
+                    <input type="number" id="tfa-acidentes" placeholder="Número de Acidentes">
+                    <input type="number" id="tfa-hht" placeholder="Horas-Homem Trabalhadas (HHT)">
+                    <button class="btn-accent" onclick="calcularTFA()">Calcular</button>
+                    <div id="resultado-tfa" class="resultado"></div>
+                </div>
+
+                <!-- CMF -->
+                <div class="metric-card">
+                    <h3>CMF (%)</h3>
+                    <p>(Custo de Manutenção / Faturamento)</p>
+                    <input type="number" id="cmf-custo" placeholder="Custo Total de Manutenção (R$)">
+                    <input type="number" id="cmf-faturamento" placeholder="Faturamento Bruto (R$)">
+                    <button class="btn-accent" onclick="calcularCMF()">Calcular</button>
+                    <div id="resultado-cmf" class="resultado"></div>
+                </div>
+
             </div>
         </section>
 

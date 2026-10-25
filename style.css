@@ -1,9 +1,10 @@
 /* Variáveis de Cores - Regra 60-30-10 */
 :root {
     --color-60: #FFFAF0; /* Fundo principal */
-    --color-30: #4682B4; /* Estruturas, Nav, Títulos */
+    --color-30: #13222e; /* Estruturas, Nav, Títulos */
     --color-10: #A52A2A; /* Botões, Destaques, Ações */
     --text-dark: #333333;
+    --color-20: #2b2f6f; /* TITULO POP e OS */
 }
 
 * {
@@ -18,38 +19,66 @@ body {
     color: var(--text-dark);
 }
 
-/* Navegação (30%) */
+/* =========================================
+   NAVEGAÇÃO (BASEADO NA IMAGEM ANEXADA)
+========================================= */
 .navbar {
-    background-color: var(--color-30);
-    color: var(--color-60);
-    padding: 1rem 2rem;
+    background-color: transparent;
+    padding-top: 2rem; /* Espaço apenas em cima da logo */
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    gap: 1.5rem;
+    box-shadow: none;
+    width: 100%; /* Garante que o container ocupe a tela toda */
 }
 
-.navbar .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
+.nav-logo {
+    max-width: 220px; /* Você pode aumentar ou diminuir esse valor se achar necessário */
+    height: auto;
+    margin-bottom: 5px; /* Dá um pequeno espaço entre a logo e a barra escura */
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
+    justify-content: center; /* Centraliza os links no meio da tela */
+    background-color: #2d3238; 
+    width: 100%; /* Faz a barra escura esticar de ponta a ponta na tela */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .nav-links a {
-    color: var(--color-60);
+    color: #e0e0e0;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s;
+    padding: 1rem 2rem;
+    display: block;
+    position: relative;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .nav-links a:hover {
-    color: var(--color-10);
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
 }
+
+/* Efeito da linha vermelha embaixo */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: var(--color-10);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
 
 /* Container Principal */
 .container {
@@ -98,10 +127,43 @@ body {
     border-top: 8px solid var(--color-30);
 }
 
-.document-container h2, .document-container h3 {
+/* =========================================
+   CABEÇALHO DOS DOCUMENTOS (COM LOGO)
+========================================= */
+.doc-header {
+    display: flex;
+    align-items: center; /* Alinha a logo e o texto verticalmente */
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--color-30);
+    padding-bottom: 15px;
+}
+
+.doc-logo {
+    width: 140px; 
+    height: auto;
+}
+
+.doc-title {
+    flex: 1;
     text-align: center;
-    color: var(--color-30);
-    margin-bottom: 10px;
+}
+
+.doc-header::after {
+    content: "";
+    width: 140px;
+    display: block;
+}
+
+.doc-title h2 {
+    color: var(--color-20);
+    margin-bottom: 5px;
+    font-size: 1.4rem;
+}
+
+.doc-title h3 {
+    color: var(--color-20);
+    font-size: 1.1rem;
 }
 
 .document-container h4 {
@@ -121,7 +183,7 @@ body {
 input[type="text"], input[type="date"], input[type="number"], textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #893333;
     border-radius: 4px;
     margin-bottom: 10px;
     background-color: var(--color-60);
@@ -209,7 +271,7 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
 }
 
 .about-card {
-    background: white;
+    background: rgb(118, 42, 42);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -224,6 +286,7 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
     border-radius: 8px;
     text-align: center;
 }
+
 /* =========================================
    ESTILOS PARA A ABA DE CONSULTA
 ========================================= */
@@ -257,13 +320,95 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
 }
 
 /* =========================================
+   ESTILOS DE LABELS E GRUPOS DE INPUT
+========================================= */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--color-30);
+    font-size: 0.95rem;
+}
+
+.table-input {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: var(--color-60);
+    font-size: 0.9rem;
+}
+
+.table-input:focus {
+    outline: none;
+    border-color: var(--color-30);
+}
+
+/* =========================================
+   BOTÕES DE ADICIONAR E REMOVER (CHECKLIST)
+========================================= */
+.btn-add {
+    background-color: var(--color-30);
+    color: var(--color-60);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-add:hover {
+    background-color: #35638a;
+}
+
+.btn-remove {
+    background-color: var(--color-10);
+    color: var(--color-60);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-remove:hover {
+    background-color: #801f1f;
+}
+
+/* =========================================
+   ESTILOS DO CHECKLIST DINÂMICO (OS)
+========================================= */
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.checklist-item input[type="checkbox"] {
+    transform: scale(1.3);
+    cursor: pointer;
+}
+
+.checklist-item input[type="text"] {
+    flex: 1;
+    margin-bottom: 0 !important;
+}
+
+/* =========================================
    CORREÇÃO DE FORMATAÇÃO PARA O PDF
 ========================================= */
 .pdf-mode {
-    /* Remove sombras e bordas do container principal na hora de imprimir */
     box-shadow: none !important;
     border: none !important;
-    padding: 10px !important;
+    padding: 20px 30px !important; /* Dá um respiro nas bordas da folha A4 */
     margin: 0 !important;
     width: 100% !important;
     max-width: none !important;
@@ -280,10 +425,48 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
     padding: 0 !important;
     margin-bottom: 5px !important;
     resize: none !important;
-    overflow: hidden !important; /* Evita barra de rolagem no PDF */
+    overflow: hidden !important;
 }
 
-/* Esconde os botões na hora de imprimir o PDF */
 .pdf-mode .hide-on-pdf {
     display: none !important;
+}
+
+.pdf-mode .item-numero {
+    text-align: center;
+}
+
+.pdf-mode .table-input {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+}
+
+/* =========================================
+    CORTE NA QUEBRA DE PÁGINA (PDF)
+========================================= */
+.input-group,
+h4,
+tr,
+.checklist-item,
+.signatures,
+.doc-header {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+/* =========================================
+   ESTILOS ESPECÍFICOS DA REQUISIÇÃO
+========================================= */
+.req-title-box {
+    border-top: 2px solid var(--color-30);
+    border-bottom: 2px solid var(--color-30);
+    padding: 10px 0;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.req-title-box h2 {
+    color: var(--color-30);
+    font-size: 1.5rem;
+    letter-spacing: 2px;
 }
