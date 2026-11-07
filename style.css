@@ -601,3 +601,24 @@ tr,
     page-break-inside: avoid !important;
     break-inside: avoid !important;
 }
+
+/* =========================================
+   TRAVA DEFINITIVA PARA TÍTULOS ÓRFÃOS
+========================================= */
+.keep-together {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    width: 100% !important;
+}
+/* =========================================
+   TRAVA DEFINITIVA PARA LINHAS DA TABELA
+========================================= */
+.pdf-mode .pop-table tr,
+.pdf-mode .pop-table td {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+
+.pdf-mode .pop-table td {
+    vertical-align: top !important; /* Mantém o texto alinhado no topo da célula */
+}

@@ -223,13 +223,11 @@ function gerarPDF(elementoId, nomeArquivo) {
         container.className = 'temp-pdf-container';
         
         if (el.tagName.toLowerCase() === 'textarea') {
-            // Divide o texto por quebras de linha (Enter) para evitar corte no meio das letras
             const paragrafos = (el.value || ' ').split('\n');
             paragrafos.forEach(texto => {
                 const p = document.createElement('div');
                 p.className = 'temp-pdf-text pdf-paragraph';
                 p.innerText = texto || ' ';
-                // Se for uma linha vazia (duplo Enter), mantém o espaço visual
                 if (texto.trim() === '') p.style.minHeight = '1.2em'; 
                 container.appendChild(p);
             });
@@ -245,35 +243,63 @@ function gerarPDF(elementoId, nomeArquivo) {
         el.style.display = 'none'; 
     });
 
+    const headings = elemento.querySelectorAll('h4');
+    headings.forEach(h4 => {
+        const nextEl = h4.nextElementSibling;
+        if (nextEl && nextEl.classList.contains('input-group')) {
+            const container = nextEl.querySelector('.temp-pdf-container');
+            if (container) {
+                const firstP = container.querySelector('.pdf-paragraph');
+                if (firstP) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'temp-pdf-wrapper keep-together';
+                    
+                    h4.parentNode.insertBefore(wrapper, h4);
+                    wrapper.appendChild(h4);
+                    wrapper.appendChild(firstP);
+                }
+            }
+        }
+    });
+
     elemento.classList.add('pdf-mode');
     window.scrollTo(0, 0);
     
+    // --- A MÁGICA PARA A TABELA ACONTECE AQUI (avoid: 'tr') ---
     const opt = {
         margin:       [10, 10, 10, 10],
         filename:     nomeArquivo,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true }, 
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['css', 'legacy'] }
+        pagebreak:    { mode: ['css', 'legacy'], avoid: ['tr', '.keep-together', '.checklist-item'] }
+    };
+
+    const limparTemp = () => {
+        elemento.classList.remove('pdf-mode'); 
+        textElements.forEach(el => el.style.display = '');
+        
+        const wrappers = elemento.querySelectorAll('.temp-pdf-wrapper');
+        wrappers.forEach(wrapper => {
+            const h4 = wrapper.querySelector('h4');
+            if (h4) wrapper.parentNode.insertBefore(h4, wrapper);
+            wrapper.remove();
+        });
+
+        const temps = elemento.querySelectorAll('.temp-pdf-container');
+        temps.forEach(div => div.remove());
     };
 
     setTimeout(() => {
         html2pdf().set(opt).from(elemento).save().then(() => {
-            elemento.classList.remove('pdf-mode'); 
-            textElements.forEach(el => el.style.display = '');
-            const temps = elemento.querySelectorAll('.temp-pdf-container');
-            temps.forEach(div => div.remove());
+            limparTemp();
         }).catch(err => {
             console.error("Erro ao gerar PDF:", err);
-            elemento.classList.remove('pdf-mode'); 
-            textElements.forEach(el => el.style.display = '');
-            const temps = elemento.querySelectorAll('.temp-pdf-container');
-            temps.forEach(div => div.remove());
+            limparTemp();
             alert("Erro ao gerar o PDF.");
         });
     }, 300);
 }
-
 // ==========================================
 // 7. CONFIGURAÇÃO FIREBASE E BANCO DE DADOS
 // ==========================================
