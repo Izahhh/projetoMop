@@ -238,6 +238,8 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
 /* Métricas */
 .metrics-container {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* centraliza os cartões da última linha */
     gap: 20px;
     margin-top: 20px;
 }
@@ -246,13 +248,51 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    flex: 1;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     border-left: 5px solid var(--color-10);
+    display: flex;
+    flex-direction: column;
+    
+    /* Configuração para manter 3 por linha e centralizar as sobras */
+    flex-basis: 280px; /* Tamanho base do cartão */
+    flex-grow: 1; /* Permite que eles cresçam para preencher o espaço */
+    max-width: 310px; /* Impede que os dois últimos fiquem esticados demais */
 }
 
 .metric-card h3 {
     color: var(--color-30);
+    margin-bottom: 5px;
+}
+
+.metric-card p {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.metric-card button {
+    margin-top: auto;
+    width: 100%;
+}
+
+.metric-card p {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 15px;
+    /* Se você adicionou "flex-grow: 1;" aqui na resposta anterior, pode apagar, 
+       pois agora os input-groups vão preencher o espaço naturalmente */
+}
+
+/* Ajusta o tamanho da fonte das labels especificamente dentro dos cartões */
+.metric-card .input-group label {
+    font-size: 0.85rem;
+    color: var(--color-30);
+    margin-bottom: 3px;
+}
+
+.metric-card .input-group {
+    margin-bottom: 12px; /* Reduz um pouco o espaço entre os campos para caber melhor */
 }
 
 .resultado {
@@ -260,8 +300,9 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
     font-size: 1.2rem;
     font-weight: bold;
     color: var(--color-10);
+    text-align: center;
+    min-height: 24px;
 }
-
 /* Sobre a Empresa */
 .about-grid {
     display: grid;
@@ -397,6 +438,7 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
     cursor: pointer;
 }
 
+
 .checklist-item input[type="text"] {
     flex: 1;
     margin-bottom: 0 !important;
@@ -469,4 +511,55 @@ tr,
     color: var(--color-30);
     font-size: 1.5rem;
     letter-spacing: 2px;
+}
+
+/* =========================================
+   CORREÇÃO DAS ASSINATURAS NO PDF
+========================================= */
+.pdf-mode .signatures {
+    display: flex !important;
+    justify-content: space-around !important;
+    width: 100% !important;
+    margin-top: 40px !important;
+    page-break-inside: avoid !important; /* Evita que a assinatura seja cortada ao meio na quebra de página */
+}
+
+.pdf-mode .signatures div {
+    width: 40% !important;
+}
+
+.pdf-mode .signatures hr {
+    border: none !important;
+    border-top: 1px solid black !important; /* Força a linha a aparecer no PDF */
+    width: 100% !important;
+    display: block !important;
+    margin-bottom: 5px !important;
+}
+
+/* Dá um espaço extra no final do documento para garantir que a assinatura caiba */
+.pdf-mode {
+    padding-bottom: 40px !important;
+}
+
+/* =========================================
+   CORREÇÃO DEFINITIVA DO CORTE DE TEXTO NO PDF
+========================================= */
+/* Remove a trava do grupo para permitir que o texto flua para a próxima página */
+.pdf-mode .input-group {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+}
+
+/* Formata os parágrafos, justifica o texto e impede que a linha seja cortada ao meio */
+.pdf-mode .pdf-paragraph {
+    text-align: justify !important;
+    white-space: pre-wrap !important;
+    line-height: 1.6 !important;
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 5px !important; /* Espaço entre os parágrafos */
+    
+    /* A mágica acontece aqui: proíbe o PDF de cortar este bloco ao meio */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
 }

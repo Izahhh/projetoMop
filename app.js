@@ -123,6 +123,28 @@ window.atualizarNumerosPOP = function() {
     inputsNumero.forEach((input, index) => input.value = index + 1);
 }
 
+window.adicionarCriterioPOP = function() {
+    const container = document.getElementById('pop-criterios-container');
+    if (!container) return;
+    const div = document.createElement('div');
+    div.className = 'checklist-item';
+    div.innerHTML = `
+        <input type="checkbox">
+        <input type="text" class="table-input" placeholder="Descreva o critério de aceitação..." required>
+        <button type="button" class="btn-remove hide-on-pdf" onclick="removerCriterioPOP(this)">X</button>
+    `;
+    container.appendChild(div);
+}
+
+window.removerCriterioPOP = function(botao) {
+    const container = document.getElementById('pop-criterios-container');
+    if (container.querySelectorAll('.checklist-item').length > 1) {
+        botao.closest('.checklist-item').remove();
+    } else {
+        alert("É necessário ter pelo menos um critério de aceitação.");
+    }
+}
+
 // ==========================================
 // 4. FUNÇÕES DO CHECKLIST DINÂMICO (OS)
 // ==========================================
@@ -197,11 +219,29 @@ function gerarPDF(elementoId, nomeArquivo) {
 
     const textElements = elemento.querySelectorAll('textarea, input[type="text"], input[type="date"], input[type="number"]');
     textElements.forEach(el => {
-        const div = document.createElement('div');
-        div.className = 'temp-pdf-text';
-        if(el.classList.contains('table-input')) div.style.textAlign = 'left';
-        div.innerText = el.value || ' '; 
-        el.parentNode.insertBefore(div, el); 
+        const container = document.createElement('div');
+        container.className = 'temp-pdf-container';
+        
+        if (el.tagName.toLowerCase() === 'textarea') {
+            // Divide o texto por quebras de linha (Enter) para evitar corte no meio das letras
+            const paragrafos = (el.value || ' ').split('\n');
+            paragrafos.forEach(texto => {
+                const p = document.createElement('div');
+                p.className = 'temp-pdf-text pdf-paragraph';
+                p.innerText = texto || ' ';
+                // Se for uma linha vazia (duplo Enter), mantém o espaço visual
+                if (texto.trim() === '') p.style.minHeight = '1.2em'; 
+                container.appendChild(p);
+            });
+        } else {
+            const div = document.createElement('div');
+            div.className = 'temp-pdf-text';
+            if(el.classList.contains('table-input')) div.style.textAlign = 'left';
+            div.innerText = el.value || ' ';
+            container.appendChild(div);
+        }
+        
+        el.parentNode.insertBefore(container, el); 
         el.style.display = 'none'; 
     });
 
@@ -221,13 +261,13 @@ function gerarPDF(elementoId, nomeArquivo) {
         html2pdf().set(opt).from(elemento).save().then(() => {
             elemento.classList.remove('pdf-mode'); 
             textElements.forEach(el => el.style.display = '');
-            const temps = elemento.querySelectorAll('.temp-pdf-text');
+            const temps = elemento.querySelectorAll('.temp-pdf-container');
             temps.forEach(div => div.remove());
         }).catch(err => {
             console.error("Erro ao gerar PDF:", err);
             elemento.classList.remove('pdf-mode'); 
             textElements.forEach(el => el.style.display = '');
-            const temps = elemento.querySelectorAll('.temp-pdf-text');
+            const temps = elemento.querySelectorAll('.temp-pdf-container');
             temps.forEach(div => div.remove());
             alert("Erro ao gerar o PDF.");
         });
@@ -237,10 +277,9 @@ function gerarPDF(elementoId, nomeArquivo) {
 // ==========================================
 // 7. CONFIGURAÇÃO FIREBASE E BANCO DE DADOS
 // ==========================================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 const firebaseConfig = {
     apiKey: "AIzaSyDGF3xMbGKQg0xX_Bwk3pOLfUrDE6anwK0",
     authDomain: "techman-manutencao.firebaseapp.com",
@@ -395,6 +434,7 @@ window.carregarRegistros = async function() {
     try {
         const osSnapshot = await getDocs(collection(db, "ordens_servico"));
         osTableBody.innerHTML = ""; 
+        if (osSnapshot.empty) osTableBody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum registro encontrado.</td></tr>";
         osSnapshot.forEach((doc) => {
             const data = doc.data();
             osTableBody.innerHTML += `
@@ -409,6 +449,7 @@ window.carregarRegistros = async function() {
 
         const popSnapshot = await getDocs(collection(db, "pops"));
         popTableBody.innerHTML = ""; 
+        if (popSnapshot.empty) popTableBody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum registro encontrado.</td></tr>";
         popSnapshot.forEach((doc) => {
             const data = doc.data();
             popTableBody.innerHTML += `
@@ -423,6 +464,7 @@ window.carregarRegistros = async function() {
 
         const reqSnapshot = await getDocs(collection(db, "requisicoes"));
         reqTableBody.innerHTML = ""; 
+        if (reqSnapshot.empty) reqTableBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Nenhum registro encontrado.</td></tr>";
         reqSnapshot.forEach((doc) => {
             const data = doc.data();
             reqTableBody.innerHTML += `
@@ -436,17 +478,28 @@ window.carregarRegistros = async function() {
 
     } catch (error) {
         console.error("Erro ao buscar registros: ", error);
+        const erroMsg = "<tr><td colspan='5' style='color: red; text-align: center; font-weight: bold;'>Erro de conexão. Verifique as Regras de Segurança do Firebase.</td></tr>";
+        osTableBody.innerHTML = erroMsg;
+        popTableBody.innerHTML = erroMsg;
+        reqTableBody.innerHTML = erroMsg;
     }
 }
 
 window.deletarRegistro = async function(colecao, idDocumento) {
     if (confirm("Tem certeza que deseja excluir este registro?")) {
         try {
-            await deleteDoc(doc(db, colecao, idDocumento));
+            // Cria a referência do documento exato que será apagado
+            const referenciaDocumento = doc(db, colecao, idDocumento);
+            
+            // Envia a ordem de exclusão para o Firebase
+            await deleteDoc(referenciaDocumento);
+            
             alert("Registro excluído com sucesso!");
-            carregarRegistros();
+            carregarRegistros(); // Atualiza a tabela na mesma hora
+            
         } catch (error) {
-            alert("Erro ao excluir o registro.");
+            console.error("Erro detalhado ao excluir:", error);
+            alert("Erro ao excluir. Verifique o console (F12) ou as Regras do Firebase.");
         }
     }
 }

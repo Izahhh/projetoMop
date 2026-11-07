@@ -190,7 +190,7 @@
                             <input type="text" id="pop-titulo" required>
                         </div>
                         <div class="input-group">
-                            <label for="pop-numero">Número do POP (Automático):</label>
+                            <label for="pop-numero">Número do POP:</label>
                             <input type="text" id="pop-numero" readonly style="background-color: #e9ecef; font-weight: bold; color: var(--color-30);">
                         </div>
                         <div class="input-group">
@@ -211,17 +211,22 @@
                         </div>
                     </div>
 
-                    <h4>1. Objetivo</h4>
+                   <h4>1. Objetivo</h4>
                     <div class="input-group">
                         <textarea id="pop-objetivo" rows="3" required></textarea>
                     </div>
 
-                    <h4>2. Recursos necessários</h4>
+                    <h4>2. Sintomas</h4>
+                    <div class="input-group">
+                        <textarea id="pop-sintomas" rows="3"  required></textarea>
+                    </div>
+
+                    <h4>3. Recursos necessários</h4>
                     <div class="input-group">
                         <textarea id="pop-recursos" rows="4" required></textarea>
                     </div>
 
-                    <h4>3. Procedimento - Checklist</h4>
+                    <h4>4. Procedimento - Checklist</h4>
                     <table class="pop-table" id="tabela-checklist">
                         <thead>
                             <tr>
@@ -246,25 +251,32 @@
                     </table>
                     <button type="button" class="btn-add hide-on-pdf" onclick="adicionarLinhaPOP()">+ Adicionar Passo</button>
 
-                    <h4>4. Critérios de aceitação</h4>
+                  <h4>5. Critérios de aceitação</h4>
                     <div class="input-group">
-                        <textarea id="pop-criterios" rows="3" required></textarea>
-                    </div>
-
-                    <div class="signatures">
-                        <div>
-                            <hr>
-                            <p>Assinatura do Elaborador</p>
+                        <div id="pop-criterios-container">
+                            <div class="checklist-item">
+                                <input type="checkbox">
+                                <input type="text" class="table-input" placeholder="Descreva o critério de aceitação..." required>
+                                <button type="button" class="btn-remove hide-on-pdf" onclick="removerCriterioPOP(this)">X</button>
+                            </div>
                         </div>
-                        <div>
-                            <hr>
-                            <p>Assinatura do Aprovador</p>
-                        </div>
+                        <button type="button" class="btn-add hide-on-pdf" onclick="adicionarCriterioPOP()" style="margin-top: 10px; width: fit-content;">+ Adicionar Critério</button>
                     </div>
-
                     <div class="form-actions hide-on-pdf">
                         <button type="submit" class="btn-accent">Registrar e Gerar PDF</button>
                     </div>
+                     
+                    <div class="signatures">
+                        <div>
+                            <hr>
+                            <p>Assinatura do Técnico</p>
+                        </div>
+                        <div>
+                            <hr>
+                            <p>Assinatura do Cliente</p>
+                        </div>
+                    </div>
+
                 </form>
             </div>
         </section>
@@ -400,6 +412,7 @@
         </section>
 
         <!-- SEÇÃO: INDICADORES (KPIs) -->
+       <!-- SEÇÃO: INDICADORES (KPIs) -->
         <section id="metrics-section" class="hidden-section">
             <h2>Indicadores de Manutenção e Confiabilidade (KPIs)</h2>
             <div class="metrics-container">
@@ -408,8 +421,14 @@
                 <div class="metric-card">
                     <h3>MTBF</h3>
                     <p>(Tempo Médio Entre Falhas)</p>
-                    <input type="number" id="mtbf-tempo" placeholder="Tempo total de operação (Horas)">
-                    <input type="number" id="mtbf-falhas" placeholder="Número de falhas">
+                    <div class="input-group">
+                        <label for="mtbf-tempo">Tempo total de operação (Horas)</label>
+                        <input type="number" id="mtbf-tempo">
+                    </div>
+                    <div class="input-group">
+                        <label for="mtbf-falhas">Número de falhas</label>
+                        <input type="number" id="mtbf-falhas">
+                    </div>
                     <button class="btn-accent" onclick="calcularMTBF()">Calcular</button>
                     <div id="resultado-mtbf" class="resultado"></div>
                 </div>
@@ -418,8 +437,14 @@
                 <div class="metric-card">
                     <h3>MTTR</h3>
                     <p>(Tempo Médio de Reparo)</p>
-                    <input type="number" id="mttr-tempo" placeholder="Tempo total de parada (Horas)">
-                    <input type="number" id="mttr-falhas" placeholder="Número de falhas">
+                    <div class="input-group">
+                        <label for="mttr-tempo">Tempo total de parada (Horas)</label>
+                        <input type="number" id="mttr-tempo">
+                    </div>
+                    <div class="input-group">
+                        <label for="mttr-falhas">Número de falhas</label>
+                        <input type="number" id="mttr-falhas">
+                    </div>
                     <button class="btn-accent" onclick="calcularMTTR()">Calcular</button>
                     <div id="resultado-mttr" class="resultado"></div>
                 </div>
@@ -428,8 +453,14 @@
                 <div class="metric-card">
                     <h3>Disponibilidade</h3>
                     <p>(Física / Inerente)</p>
-                    <input type="number" id="disp-hc" placeholder="Horas Calendário (Total)">
-                    <input type="number" id="disp-hm" placeholder="Horas de Manutenção (Parada)">
+                    <div class="input-group">
+                        <label for="disp-hc">Horas Calendário (Total)</label>
+                        <input type="number" id="disp-hc">
+                    </div>
+                    <div class="input-group">
+                        <label for="disp-hm">Horas de Manutenção (Parada)</label>
+                        <input type="number" id="disp-hm">
+                    </div>
                     <button class="btn-accent" onclick="calcularDisponibilidade()">Calcular</button>
                     <div id="resultado-disp" class="resultado"></div>
                 </div>
@@ -437,8 +468,14 @@
                 <!-- CONFIABILIDADE -->
                 <div class="metric-card">
                     <h3>Confiabilidade</h3>
-                    <input type="number" id="conf-mtbf" placeholder="MTBF (Horas)">
-                    <input type="number" id="conf-t" placeholder="Tempo de Operação Desejado (t)">
+                    <div class="input-group">
+                        <label for="conf-mtbf">MTBF (Horas)</label>
+                        <input type="number" id="conf-mtbf">
+                    </div>
+                    <div class="input-group">
+                        <label for="conf-t">Tempo de Operação Desejado (t)</label>
+                        <input type="number" id="conf-t">
+                    </div>
                     <button class="btn-accent" onclick="calcularConfiabilidade()">Calcular</button>
                     <div id="resultado-conf" class="resultado"></div>
                 </div>
@@ -447,8 +484,14 @@
                 <div class="metric-card">
                     <h3>Backlog</h3>
                     <p>(Carga de Trabalho Pendente)</p>
-                    <input type="number" id="backlog-pendentes" placeholder="Soma das horas estimadas (OS Pendentes)">
-                    <input type="number" id="backlog-disponiveis" placeholder="Horas-homem disponíveis (Período)">
+                    <div class="input-group">
+                        <label for="backlog-pendentes">Soma das horas estimadas (OS Pendentes)</label>
+                        <input type="number" id="backlog-pendentes">
+                    </div>
+                    <div class="input-group">
+                        <label for="backlog-disponiveis">Horas-homem disponíveis (Período)</label>
+                        <input type="number" id="backlog-disponiveis">
+                    </div>
                     <button class="btn-accent" onclick="calcularBacklog()">Calcular</button>
                     <div id="resultado-backlog" class="resultado"></div>
                 </div>
@@ -457,8 +500,14 @@
                 <div class="metric-card">
                     <h3>Retrabalho (%)</h3>
                     <p>(Qualidade da Manutenção)</p>
-                    <input type="number" id="ret-os" placeholder="Número de OS de Retrabalho">
-                    <input type="number" id="ret-total" placeholder="Número Total de OS">
+                    <div class="input-group">
+                        <label for="ret-os">Número de OS de Retrabalho</label>
+                        <input type="number" id="ret-os">
+                    </div>
+                    <div class="input-group">
+                        <label for="ret-total">Número Total de OS</label>
+                        <input type="number" id="ret-total">
+                    </div>
                     <button class="btn-accent" onclick="calcularRetrabalho()">Calcular</button>
                     <div id="resultado-ret" class="resultado"></div>
                 </div>
@@ -467,8 +516,14 @@
                 <div class="metric-card">
                     <h3>Taxa de Freq. de Acidentes</h3>
                     <p>(TFA - NBR 14280)</p>
-                    <input type="number" id="tfa-acidentes" placeholder="Número de Acidentes">
-                    <input type="number" id="tfa-hht" placeholder="Horas-Homem Trabalhadas (HHT)">
+                    <div class="input-group">
+                        <label for="tfa-acidentes">Número de Acidentes</label>
+                        <input type="number" id="tfa-acidentes">
+                    </div>
+                    <div class="input-group">
+                        <label for="tfa-hht">Horas-Homem Trabalhadas (HHT)</label>
+                        <input type="number" id="tfa-hht">
+                    </div>
                     <button class="btn-accent" onclick="calcularTFA()">Calcular</button>
                     <div id="resultado-tfa" class="resultado"></div>
                 </div>
@@ -477,8 +532,14 @@
                 <div class="metric-card">
                     <h3>CMF (%)</h3>
                     <p>(Custo de Manutenção / Faturamento)</p>
-                    <input type="number" id="cmf-custo" placeholder="Custo Total de Manutenção (R$)">
-                    <input type="number" id="cmf-faturamento" placeholder="Faturamento Bruto (R$)">
+                    <div class="input-group">
+                        <label for="cmf-custo">Custo Total de Manutenção (R$)</label>
+                        <input type="number" id="cmf-custo">
+                    </div>
+                    <div class="input-group">
+                        <label for="cmf-faturamento">Faturamento Bruto (R$)</label>
+                        <input type="number" id="cmf-faturamento">
+                    </div>
                     <button class="btn-accent" onclick="calcularCMF()">Calcular</button>
                     <div id="resultado-cmf" class="resultado"></div>
                 </div>
