@@ -563,3 +563,41 @@ tr,
     page-break-inside: avoid !important;
     break-inside: avoid !important;
 }
+
+/* =========================================
+   CORREÇÃO DE TÍTULOS ÓRFÃOS E JUSTIFICAÇÃO (PDF)
+========================================= */
+
+/* 1. Impede que a página quebre logo após o título (h4) */
+.pdf-mode h4 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 10px !important;
+}
+
+/* 2. Impede que a página quebre logo antes do conteúdo começar */
+.pdf-mode .input-group,
+.pdf-mode .pop-table {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+}
+
+/* 3. Reforça o texto justificado em TODOS os lugares do PDF (Parágrafos, Tabelas e Checklists) */
+.pdf-mode .pdf-paragraph,
+.pdf-mode .checklist-item .temp-pdf-text,
+.pdf-mode .pop-table td .temp-pdf-text {
+    text-align: justify !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important; /* Evita que palavras longas vazem da margem */
+    line-height: 1.6 !important;
+    display: block !important;
+    width: 100% !important;
+}
+
+/* 4. Garante que as linhas da tabela não sejam cortadas ao meio */
+.pdf-mode .pop-table tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
